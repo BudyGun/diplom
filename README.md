@@ -181,3 +181,27 @@ default = "*******"
 variable "folder_id" {
 default = "********"
 ~~~
+Генерирую пару ssh-ключей.   
+~~~
+ssh-keygen
+~~~
+Публичный ключ копирую и вставляю в файл meta.txt, указав в нём же данные по пользователю. Содержимое файла:
+~~~
+#cloud-config
+ users:
+  - name: user
+    groups: sudo
+    shell: /bin/bash
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    ssh-authorized-keys:
+      - ssh-rsa  
+ssh-rsa AAAAB3NzaC1yc2EAAA**********6W9U= vboxuser@ubuntu-diplom
+~~~
+Прописал путь до этого файла в файле main.tf:
+
+….
+metadata = {
+    user-data = "${file("/home/vboxuser/diplom/meta.txt")}"
+}
+
+
