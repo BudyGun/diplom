@@ -126,9 +126,9 @@ terraform -v
 ~~~
 ![alt text](https://github.com/BudyGun/diplom/blob/main/images/ter1.png)    
 
-Создаю файл конфигурации в домашнем каталоге:   
+Создаю файл конфигурации .terraformrc в домашнем каталоге:   
 ~~~
-nano ~/terraformrc
+nano ~/.terraformrc
 ~~~
 С содержимым:   
 ~~~
