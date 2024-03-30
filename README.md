@@ -124,4 +124,44 @@ sudo cp terraform /usr/local/bin/
 ~~~
 terraform -v
 ~~~
-![alt text](https://github.com/BudyGun/diplom/blob/main/images/ter1.png) 
+![alt text](https://github.com/BudyGun/diplom/blob/main/images/ter1.png)    
+
+Создаю файл конфигурации:   
+~~~
+nano ~/terraformrc
+~~~
+С содержимым:   
+~~~
+provider_installation {
+  network_mirror {
+    url = "https://terraform-mirror.yandexcloud.net/"
+    include = ["registry.terraform.io/*/*"]
+  }
+  direct {
+    exclude = ["registry.terraform.io/*/*"]
+  }
+}
+~~~
+В папке, где буду запускать терраформ создаю файл main.tf:
+~~~
+nano main.tf
+~~~
+С содержимым:
+~~~
+terraform {
+  required_providers {
+    yandex = {
+      source = "yandex-cloud/yandex"
+    }
+  }
+}
+
+# Описание доступа и токена
+provider "yandex" {
+  token     = var.oauth_token
+  cloud_id  = var.cloud_id
+  folder_id = var.folder_id
+  zone = "ru-central1-a"
+}
+~~~
+
