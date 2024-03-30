@@ -164,4 +164,20 @@ provider "yandex" {
   zone = "ru-central1-a"
 }
 ~~~
+В папке, где буду запускать терраформ создаю файл переменных variables.tf:
+~~~
+nano variables.tf
+~~~
+С содержимым, где описаны переменные:
+~~~
+variable "oauth_token" {
+default = "*******"
+}
 
+variable "cloud_id" {
+default = "*******"
+}
+
+variable "folder_id" {
+default = "********"
+~~~
