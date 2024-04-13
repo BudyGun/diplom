@@ -1,0 +1,57 @@
+---
+- name: update apt cache once in an hour
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: install apt-transport-https
+  apt:
+    name: apt-transport-https
+
+- name: install ca-certificates
+  apt:
+    name: ca-certificates
+
+- name: install curl
+  apt:
+    name: curl
+
+- name: install gnupg
+  apt:
+    name: gnupg
+
+- name: install lsb-release
+  apt:
+    name: lsb-release
+
+- name: install software-properties-common
+  apt:
+    name: software-properties-common
+
+- name: add docker GPG key
+  apt_key:
+    url: "https://download.docker.com/linux/debian/gpg"
+
+- name: add docker repository
+  apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable"
+  register: add_repo
+
+- name: update apt cache
+  apt:
+    update_cache: yes
+  when: add_repo.changed
+
+- name: install docker
+  apt:
+    name: 
+      - "docker-ce"
+      - "docker-ce-cli"
+      - "containerd.io"
+      - "docker-compose-plugin"
+      - "docker-buildx-plugin"
+
+- name: start docker
+  service: 
+    name: docker
+    state: started

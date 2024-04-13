@@ -1,0 +1,18 @@
+---
+- name: install postgresql libpq pip
+  apt:
+    update_cache: true
+    name:
+      - postgresql
+      - libpq-dev
+      - python3-pip
+    state: latest
+
+- name: install psycopg2
+  pip:
+    name: psycopg2-binary
+
+- name: start postgresql
+  service:
+    name: postgresql
+    state: started
