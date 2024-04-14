@@ -114,11 +114,13 @@ Cоздайте ВМ, разверните на ней Elasticsearch. Устан
 [kibana.tf](https://github.com/BudyGun/diplom/blob/main/terraform/kibana.tf) - конфиг машины kibana.      
 [webserver-1.tf](https://github.com/BudyGun/diplom/blob/main/terraform/webserver-1.tf) - конфиг машины webserver-1.  
 [webserver-2.tf](https://github.com/BudyGun/diplom/blob/main/terraform/webserver-2.tf) - конфиг машины webserver-2.   
-[main.tf](https://github.com/BudyGun/diplom/blob/main/terraform/main.tf) - конфиг terraform. 
-[meta.yaml](https://github.com/BudyGun/diplom/blob/main/terraform/meta.yaml) - метаданные.
-[networks.tf](https://github.com/BudyGun/diplom/blob/main/terraform/networks.tf) - конфиг сетей.
-
-
+[main.tf](https://github.com/BudyGun/diplom/blob/main/terraform/main.tf) - конфиг terraform.    
+[meta.yaml](https://github.com/BudyGun/diplom/blob/main/terraform/meta.yaml) - метаданные.   
+[networks.tf](https://github.com/BudyGun/diplom/blob/main/terraform/networks.tf) - конфиг сетей.   
+[outputs.tf](https://github.com/BudyGun/diplom/blob/main/terraform/outputs.tf) - конфиг вывода инфо по адресам.  
+[security_group.tf](https://github.com/BudyGun/diplom/blob/main/terraform/security_group.tf) - конфиг групп безопасности.    
+[alb.tf](https://github.com/BudyGun/diplom/blob/main/terraform/alb.tf) - конфиг таргет групп, роутера, балансировщика.   
+[snapshot.tf](https://github.com/BudyGun/diplom/blob/main/terraform/snapshot.tf) - конфиг снапшотота.   
 
 
 ## Установка terraform.
