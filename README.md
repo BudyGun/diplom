@@ -158,7 +158,7 @@ terraform {
 
 # Описание доступа и токена
 provider "yandex" {
-  token     = var.oauth_token
+  service_account_key_file= "/home/vboxuser/.ssh/authorized_key.json"
   cloud_id  = var.cloud_id
   folder_id = var.folder_id
   zone = "ru-central1-a"
@@ -170,10 +170,6 @@ nano variables.tf
 ~~~
 С содержимым, где описаны переменные:
 ~~~
-variable "oauth_token" {
-default = "*******"
-}
-
 variable "cloud_id" {
 default = "*******"
 }
