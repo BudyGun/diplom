@@ -1,2 +1,2 @@
 .terraform/
-.env
+variables.tf
