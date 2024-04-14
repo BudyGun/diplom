@@ -1000,3 +1000,71 @@ terraform apply
 ```
 Инфраструктура поднята:
 ![alt text](https://github.com/BudyGun/diplom/blob/main/images/infrastr.png)    
+
+## Ansible   
+Устанавливаю ansible:   
+```
+sudo apt install ansible
+```
+Создаю папку ansible в проекте и вней создаю файл конфигурации ansible.cfg следующего вида:
+```
+nano ansible.cfg
+```
+```
+[defaults]
+inventory = /home/vboxuser/diplom/ansible/hosts.txt
+forks = 5
+remote_user = user
+
+host_key_checking = False
+
+[privilege_escalation]
+become = True
+become_method = sudo
+```
+где, inventory = /home/vboxuser/diplom/ansible/hosts.txt - файл расположения инвентори,
+remote_user = user - пользователь, прописанный в метаданных при создании машин, которым я буду подключаться к виртуальным машинам.
+Создаю инвентори файл hosts.txt в папке ansible, адреса машин указываю внутренние fqdn:
+```
+[bastion_host]
+bastion ansible_host=51.250.89.119 ansible_ssh_user=user
+
+[webservers]
+webserver-1 ansible_host=webserver-1.ru-central1.internal
+webserver-2 ansible_host=webserver-2.ru-central1.internal
+
+[elasticsearch_host]
+elasticsearch ansible_host=elasticsearch.ru-central1.internal
+
+[kibana_host]
+kibana ansible_host=kibana.ru-central1.internal
+
+[zabbix_host]
+zabbix ansible_host=zabbix-server.ru-central1.internal
+
+[webservers:vars]
+ansible_ssh_user=user
+ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p user@51.250.89.119"'
+
+
+[elasticsearch_host:vars]
+ansible_ssh_user=user
+ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p user@51.250.89.119"'
+
+[kibana_host:vars]
+ansible_ssh_user=user
+ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p user@51.250.89.119"'
+
+[zabbix_host:vars]
+ansible_ssh_user=user
+ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p user@51.250.89.119"'
+```
+Проверяю доступность всех хостов командой:
+```
+ansible all -m ping
+```
+В результате вижу - все хосты на связи:
+
+
+
+Можно переходить к установке пакетов на вм через playbook.
