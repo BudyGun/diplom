@@ -109,29 +109,29 @@ Cоздайте ВМ, разверните на ней Elasticsearch. Устан
 
 ## Установка terraform.
 Скачиваю архив терраформ с яндекс-облака:
-~~~
+```
 wget https://hashicorp-releases.yandexcloud.net/terraform/1.6.1/terraform_1.6.1_linux_amd64.zip
-~~~
+```
 Распаковываю скачанный архив:
-~~~
+```
 unzip terraform_1.6.1_linux_amd64.zip
-~~~
+```
 Чтобы терраформ был доступен для запуска из командной строки из любого места копирую его в системную папку:
-~~~
+```
 sudo cp terraform /usr/local/bin/
-~~~
+```
 Проверяю
-~~~
+```
 terraform -v
-~~~
+```
 ![alt text](https://github.com/BudyGun/diplom/blob/main/images/ter1.png)    
 
 Создаю файл конфигурации .terraformrc в домашнем каталоге:   
-~~~
+```
 nano ~/.terraformrc
-~~~
+```
 С содержимым:   
-~~~
+```
 provider_installation {
   network_mirror {
     url = "https://terraform-mirror.yandexcloud.net/"
@@ -141,13 +141,13 @@ provider_installation {
     exclude = ["registry.terraform.io/*/*"]
   }
 }
-~~~
+```
 В папке, где буду запускать терраформ создаю файл main.tf:
-~~~
+```
 nano main.tf
-~~~
+```
 С содержимым:
-~~~
+```
 terraform {
   required_providers {
     yandex = {
@@ -163,13 +163,13 @@ provider "yandex" {
   folder_id = var.folder_id
   zone = "ru-central1-a"
 }
-~~~
+```
 В папке, где буду запускать терраформ создаю файл переменных variables.tf:
-~~~
+```
 nano variables.tf
-~~~
+```
 С содержимым, где описаны переменные:
-~~~
+```
 variable "cloud_id" {
 default = "b1guu8dde76an1n4e8ui"
 }
@@ -178,13 +178,13 @@ variable "folder_id" {
 default = "b1gom662a1nlt3u5u012"
 }
 
-~~~
+```
 Генерирую пару ssh-ключей.   
-~~~
+```
 ssh-keygen -t ed25519
-~~~
+```
 Публичный ключ копирую и вставляю в файл meta.yaml, указав в нём же данные по пользователю. Файл кладу в ту же папку, где буду запусакть терраформ. Содержимое файла:
-~~~
+```
 #cloud-config
 users:
   - name: user
@@ -193,22 +193,22 @@ users:
     sudo: 'ALL=(ALL) NOPASSWD:ALL'
     ssh_authorized_keys:
       - ssh-ed25519 AAAAC3NzaC1lZDI********** vboxuser@ubuntu-diplom
-~~~
+```
 Путь до это файла будет прописан в файлах создаваемых машин:
-~~~
+```
  metadata = {
     user-data = "${file("./meta.yaml")}"
 }
-~~~
+```
 Создаю конфиг машины бастион (файл - bastion.tf). Использую образ операционной системы Ubuntu 22.04 LTS   
 Идентификаторы продукта:   
 image_id: fd8s4upujl9u40j5p77l   
 
-~~~
+```
 nano bastion.tf
-~~~
+```
 
-~~~
+```
 # Бастион хост
 resource "yandex_compute_instance" "bastion" {
 
@@ -253,5 +253,58 @@ resource "yandex_compute_instance" "bastion" {
   }
 
 }
-~~~
+```
+Создаю конфиг машины кибана (файл - kibana.tf). Использую образ операционной системы Ubuntu 22.04 LTS   
+Идентификаторы продукта:   
+image_id: fd8s4upujl9u40j5p77l   
 
+```
+nano kibana.tf
+```
+```
+# Описание Kibana VM
+resource "yandex_compute_instance" "kibana" {
+
+  name                      = "kibana"
+  hostname                  = "kibana"
+  zone                      = "ru-central1-a"
+  allow_stopping_for_update = true
+
+  resources {
+    core_fraction = 20
+    cores         = 2
+    memory        = 2
+  }
+
+  boot_disk {
+    initialize_params {
+      image_id = "fd8s4upujl9u40j5p77l"
+      size     = 12
+    }
+  }
+
+  network_interface {
+    subnet_id = yandex_vpc_subnet.bastion-external-segment.id
+
+    security_group_ids = [
+                           yandex_vpc_security_group.internal-ssh-sg.id,
+                           yandex_vpc_security_group.external-ssh-sg.id,
+                           yandex_vpc_security_group.zabbix-sg.id,
+                           yandex_vpc_security_group.kibana-sg.id,
+                           yandex_vpc_security_group.egress-sg.id
+                         ]
+
+    nat        = true
+    ip_address = "192.168.50.30"
+  }
+
+metadata = {
+    user-data = "${file("./meta.yaml")}"
+}
+
+  scheduling_policy {
+    preemptible = true
+  }
+
+}
+```
