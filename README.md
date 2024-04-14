@@ -108,12 +108,12 @@ Cоздайте ВМ, разверните на ней Elasticsearch. Устан
 # РЕШЕНИЕ   
 
 ## Конфигурационные файлы   
-Конфиг машины bastion - [bastion.tf](https://github.com/BudyGun/diplom/blob/main/terraform/bastion.tf)    
-Конфиг машины elasticsearch - [elasticsearch.tf](https://github.com/BudyGun/diplom/blob/main/terraform/elasticsearch.tf)    
-Конфиг машины zabbix - [zabbix.tf](https://github.com/BudyGun/diplom/blob/main/terraform/zabbix.tf)    
-Конфиг машины kibana - [kibana.tf](https://github.com/BudyGun/diplom/blob/main/terraform/kibana.tf)    
-Конфиг машины webserver-1 - [webserver-1.tf](https://github.com/BudyGun/diplom/blob/main/terraform/webserver-1.tf)    
-Конфиг машины webserver-2 - [webserver-2.tf](https://github.com/BudyGun/diplom/blob/main/terraform/webserver-2.tf)    
+[bastion.tf](https://github.com/BudyGun/diplom/blob/main/terraform/bastion.tf) - конфиг машины bastion.       
+[elasticsearch.tf](https://github.com/BudyGun/diplom/blob/main/terraform/elasticsearch.tf) - конфиг машины elasticsearch.      
+[zabbix.tf](https://github.com/BudyGun/diplom/blob/main/terraform/zabbix.tf) - конфиг машины zabbix.    
+[kibana.tf](https://github.com/BudyGun/diplom/blob/main/terraform/kibana.tf) - конфиг машины kibana.      
+[webserver-1.tf](https://github.com/BudyGun/diplom/blob/main/terraform/webserver-1.tf) - конфиг машины webserver-1.  
+[webserver-2.tf](https://github.com/BudyGun/diplom/blob/main/terraform/webserver-2.tf) - конфиг машины webserver-2.   
 
 ## Установка terraform.
 Скачиваю архив терраформ с яндекс-облака:
