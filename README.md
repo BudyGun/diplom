@@ -209,7 +209,7 @@ nano bastion.tf
 ```
 
 ```
-# Бастион хост
+# Бастион
 resource "yandex_compute_instance" "bastion" {
 
   name     = "bastion"
@@ -262,7 +262,7 @@ image_id: fd8s4upujl9u40j5p77l
 nano kibana.tf
 ```
 ```
-# Описание Kibana VM
+# Кибана
 resource "yandex_compute_instance" "kibana" {
 
   name                      = "kibana"
