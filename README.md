@@ -114,6 +114,10 @@ Cоздайте ВМ, разверните на ней Elasticsearch. Устан
 [kibana.tf](https://github.com/BudyGun/diplom/blob/main/terraform/kibana.tf) - конфиг машины kibana.      
 [webserver-1.tf](https://github.com/BudyGun/diplom/blob/main/terraform/webserver-1.tf) - конфиг машины webserver-1.  
 [webserver-2.tf](https://github.com/BudyGun/diplom/blob/main/terraform/webserver-2.tf) - конфиг машины webserver-2.   
+[main.tf](https://github.com/BudyGun/diplom/blob/main/terraform/main.tf) - конфиг terraform. 
+
+
+
 
 ## Установка terraform.
 Скачиваю архив терраформ с яндекс-облака:
