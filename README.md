@@ -1001,6 +1001,13 @@ terraform apply
 Инфраструктура поднята:
 ![alt text](https://github.com/BudyGun/diplom/blob/main/images/infrastr.png)    
 
+Проверяю доступность машины bastion по ssh:
+```
+ssh user@51.250.89.119
+```
+Машина доступна:
+![alt text](https://github.com/BudyGun/diplom/blob/main/images/infrastr2.png)   
+
 ## Ansible   
 Устанавливаю ansible:   
 ```
