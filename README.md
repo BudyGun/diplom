@@ -975,3 +975,12 @@ resource "yandex_compute_snapshot_schedule" "snapshot" {
     "${yandex_compute_instance.kibana.boot_disk.0.disk_id}", ]
 }
 ```
+Запускаю терраформ и проверяю поднятие инфраструктуры в облаке:
+```
+terraform init
+```
+```
+terraform apply
+```
+Инфраструктура поднята:
+![alt text](https://github.com/BudyGun/diplom/blob/main/images/infrastr.png)    
