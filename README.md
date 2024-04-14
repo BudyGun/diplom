@@ -107,6 +107,14 @@ Cоздайте ВМ, разверните на ней Elasticsearch. Устан
 
 # РЕШЕНИЕ   
 
+## Конфигурационные файлы
+Конфиг машины bastion - [bastion.tf](https://github.com/BudyGun/diplom/blob/main/terraform/bastion.tf) 
+Конфиг машины elasticsearch - [bastion.tf](https://github.com/BudyGun/diplom/blob/main/terraform/elasticsearch.tf) 
+Конфиг машины zabbix - [bastion.tf](https://github.com/BudyGun/diplom/blob/main/terraform/zabbix.tf) 
+Конфиг машины kibana - [bastion.tf](https://github.com/BudyGun/diplom/blob/main/terraform/kibana.tf) 
+Конфиг машины webserver-1 - [bastion.tf](https://github.com/BudyGun/diplom/blob/main/terraform/webserver-1.tf) 
+Конфиг машины webserver-2 - [bastion.tf](https://github.com/BudyGun/diplom/blob/main/terraform/webserver-2.tf) 
+
 ## Установка terraform.
 Скачиваю архив терраформ с яндекс-облака:
 ```
@@ -125,7 +133,6 @@ sudo cp terraform /usr/local/bin/
 terraform -v
 ```
 ![alt text](https://github.com/BudyGun/diplom/blob/main/images/ter1.png)    
-Конфиг машины bastion - [bastion.tf](https://github.com/BudyGun/diplom/blob/main/terraform/bastion.tf) 
 
 Создаю файл конфигурации .terraformrc в домашнем каталоге:   
 ```
