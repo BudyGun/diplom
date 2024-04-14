@@ -171,11 +171,13 @@ nano variables.tf
 С содержимым, где описаны переменные:
 ~~~
 variable "cloud_id" {
-default = "*******"
+default = "b1guu8dde76an1n4e8ui"
 }
 
 variable "folder_id" {
-default = "********"
+default = "b1gom662a1nlt3u5u012"
+}
+
 ~~~
 Генерирую пару ssh-ключей.   
 ~~~
