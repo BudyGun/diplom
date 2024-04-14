@@ -200,7 +200,7 @@ users:
     user-data = "${file("./meta.yaml")}"
 }
 ```
-Создаю конфиг машины бастион (файл - bastion.tf). Использую образ операционной системы Ubuntu 22.04 LTS   
+Создаю конфиг машины Bastion (файл bastion.tf). Использую образ операционной системы Ubuntu 22.04 LTS   
 Идентификаторы продукта:   
 image_id: fd8s4upujl9u40j5p77l   
 
@@ -209,7 +209,7 @@ nano bastion.tf
 ```
 
 ```
-# Бастион
+# Bastion
 resource "yandex_compute_instance" "bastion" {
 
   name     = "bastion"
@@ -254,7 +254,7 @@ resource "yandex_compute_instance" "bastion" {
 
 }
 ```
-Создаю конфиг машины кибана (файл - kibana.tf). Использую образ операционной системы Ubuntu 22.04 LTS   
+Создаю конфиг машины Kibana (файл kibana.tf). Использую образ операционной системы Ubuntu 22.04 LTS   
 Идентификаторы продукта:   
 image_id: fd8s4upujl9u40j5p77l   
 
@@ -262,7 +262,7 @@ image_id: fd8s4upujl9u40j5p77l
 nano kibana.tf
 ```
 ```
-# Кибана
+# Kibana
 resource "yandex_compute_instance" "kibana" {
 
   name                      = "kibana"
@@ -299,6 +299,56 @@ resource "yandex_compute_instance" "kibana" {
   }
 
 metadata = {
+    user-data = "${file("./meta.yaml")}"
+}
+
+  scheduling_policy {
+    preemptible = true
+  }
+
+}
+```
+Создаю конфиг машины elasticsearch (файл elasticsearch.tf). Использую образ операционной системы Ubuntu 22.04 LTS   
+Идентификаторы продукта:   
+image_id: fd8s4upujl9u40j5p77l  
+```
+# Elasticsearch
+
+resource "yandex_compute_instance" "elasticsearch" {
+
+  name = "elasticsearch"
+  hostname = "elasticsearch"
+  zone = "ru-central1-a"
+  allow_stopping_for_update = true
+
+  resources {
+    core_fraction = 20
+    cores         = 2
+    memory        = 2
+  }
+
+  boot_disk {
+    initialize_params {
+      image_id = "fd8s4upujl9u40j5p77l"
+      size     = 12
+    }
+  }
+
+  network_interface {
+    subnet_id = yandex_vpc_subnet.bastion-internal-segment.id
+
+    security_group_ids = [
+                           yandex_vpc_security_group.internal-ssh-sg.id,
+                           yandex_vpc_security_group.external-ssh-sg.id,
+                           yandex_vpc_security_group.zabbix-sg.id,
+                           yandex_vpc_security_group.elastic-sg.id,
+                           yandex_vpc_security_group.egress-sg.id
+                         ]
+    nat       = false
+    ip_address = "192.168.10.30"
+  }
+
+ metadata = {
     user-data = "${file("./meta.yaml")}"
 }
 
