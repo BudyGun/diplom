@@ -998,14 +998,14 @@ terraform init
 ```
 terraform apply
 ```
-Инфраструктура поднята:
+Инфраструктура поднята:   
 ![alt text](https://github.com/BudyGun/diplom/blob/main/images/infrastr.png)    
 
 Проверяю доступность машины bastion по ssh:
 ```
 ssh user@51.250.89.119
 ```
-Машина доступна:
+Машина доступна:    
 ![alt text](https://github.com/BudyGun/diplom/blob/main/images/infrastr2.png)   
 
 ## Ansible   
@@ -1070,7 +1070,7 @@ ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p user@51.250.89.119"'
 ```
 ansible all -m ping
 ```
-В результате вижу - все хосты на связи:
+В результате вижу - все хосты на связи:    
 ![alt text](https://github.com/BudyGun/diplom/blob/main/images/connect.png)  
 
 
