@@ -1071,6 +1071,7 @@ ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p user@51.250.89.119"'
 ansible all -m ping
 ```
 В результате вижу - все хосты на связи:
+![alt text](https://github.com/BudyGun/diplom/blob/main/images/connect.png)  
 
 
 
