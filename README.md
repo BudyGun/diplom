@@ -125,7 +125,7 @@ sudo cp terraform /usr/local/bin/
 terraform -v
 ```
 ![alt text](https://github.com/BudyGun/diplom/blob/main/images/ter1.png)    
-(bastion.tf)[alt text](https://github.com/BudyGun/diplom/blob/main/terraform/bastion.tf) 
+Конфиг машины bastion - [bastion.tf](https://github.com/BudyGun/diplom/blob/main/terraform/bastion.tf) 
 
 Создаю файл конфигурации .terraformrc в домашнем каталоге:   
 ```
