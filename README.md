@@ -1009,7 +1009,7 @@ ssh user@51.250.89.119
 ![alt text](https://github.com/BudyGun/diplom/blob/main/images/infrastr2.png)   
 
 ## Ansible   
-Устанавливаю ansible:   
+Устанавливаю ansible на машину, где собирается проект:   
 ```
 sudo apt install ansible
 ```
