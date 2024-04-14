@@ -115,6 +115,8 @@ Cоздайте ВМ, разверните на ней Elasticsearch. Устан
 [webserver-1.tf](https://github.com/BudyGun/diplom/blob/main/terraform/webserver-1.tf) - конфиг машины webserver-1.  
 [webserver-2.tf](https://github.com/BudyGun/diplom/blob/main/terraform/webserver-2.tf) - конфиг машины webserver-2.   
 [main.tf](https://github.com/BudyGun/diplom/blob/main/terraform/main.tf) - конфиг terraform. 
+[meta.yaml](https://github.com/BudyGun/diplom/blob/main/terraform/meta.yaml) - метаданные.
+[networks.tf](https://github.com/BudyGun/diplom/blob/main/terraform/networks.tf) - конфиг сетей.
 
 
 
