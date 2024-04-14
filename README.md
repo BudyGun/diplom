@@ -184,14 +184,14 @@ provider "yandex" {
 ```
 nano variables.tf
 ```
-С содержимым, где описаны переменные:
+С содержимым, где описаны переменные, следующего вида:
 ```
 variable "cloud_id" {
-default = "b1guu8dde76an1n4e8ui"
+default = "b1guu8d****"
 }
 
 variable "folder_id" {
-default = "b1gom662a1nlt3u5u012"
+default = "b1gom66****"
 }
 
 ```
