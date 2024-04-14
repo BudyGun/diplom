@@ -1,8 +1,8 @@
 #cloud-config
- users:
+users:
   - name: user
     groups: sudo
     shell: /bin/bash
-    sudo: ['ALL=(ALL) NOPASSWD:ALL']
-    ssh-authorized-keys:
-ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHtwz7fDFC/fatcs2Z+5sRJgxP8z+dO+ZH2F+xWRMr6e vboxuser@ubuntu-diplom
+    sudo: 'ALL=(ALL) NOPASSWD:ALL'
+    ssh_authorized_keys:
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIKEGQoTL55s2qPgbVtIcqdDNEKQS+MT/wrQ26K7Aneh vboxuser@ubuntu-diplom

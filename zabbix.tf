@@ -1,4 +1,4 @@
-# Описание Zabbix VM
+# Zabbix
 
 resource "yandex_compute_instance" "zabbix-server" {
 
@@ -35,7 +35,7 @@ resource "yandex_compute_instance" "zabbix-server" {
   }
 
 metadata = {
-    user-data = "${file("/home/vboxuser/diplom/meta.yaml")}"
+    user-data = "${file("./meta.yaml")}"
 }
 
   scheduling_policy {

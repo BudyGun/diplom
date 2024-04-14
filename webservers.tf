@@ -1,5 +1,3 @@
-# Описание Web серверов
-
 # web server 1
 
 resource "yandex_compute_instance" "webserver-1" {
@@ -16,7 +14,7 @@ resource "yandex_compute_instance" "webserver-1" {
 
   boot_disk {
     initialize_params {
-      image_id = "fd8l45jhe4nvt0ih7h2e"
+      image_id = "fd8s4upujl9u40j5p77l"
       size     = 12
     }
   }
@@ -65,7 +63,7 @@ resource "yandex_compute_instance" "webserver-2" {
 
   boot_disk {
     initialize_params {
-      image_id = "fd8l45jhe4nvt0ih7h2e"
+      image_id = "fd8s4upujl9u40j5p77l"
       size     = 10
     }
   }

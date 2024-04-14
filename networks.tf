@@ -1,6 +1,5 @@
-# Сеть и подсети
+# Сети и подсети
 
-# Обозначаем Сеть
 # External Network
 
 resource "yandex_vpc_network" "bastion-network" {

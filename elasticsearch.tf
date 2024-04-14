@@ -1,4 +1,4 @@
-# Описание Elasticsearch VM
+# Elasticsearch
 
 resource "yandex_compute_instance" "elasticsearch" {
 
@@ -15,7 +15,7 @@ resource "yandex_compute_instance" "elasticsearch" {
 
   boot_disk {
     initialize_params {
-      image_id = "fd8l45jhe4nvt0ih7h2e"
+      image_id = "fd8s4upujl9u40j5p77l"
       size     = 12
     }
   }
@@ -35,7 +35,7 @@ resource "yandex_compute_instance" "elasticsearch" {
   }
 
  metadata = {
-    user-data = "${file("/home/vboxuser/diplom/meta.yaml")}"
+    user-data = "${file("./meta.yaml")}"
 }
 
   scheduling_policy {

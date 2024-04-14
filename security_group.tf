@@ -1,5 +1,3 @@
-# Группы безопасности
-
 # Внешний ssh/External ssh
 
 resource "yandex_vpc_security_group" "external-ssh-sg" {
@@ -8,14 +6,14 @@ resource "yandex_vpc_security_group" "external-ssh-sg" {
   network_id          = yandex_vpc_network.bastion-network.id
 
   ingress {
-    description       = "Входящий трафик TCP. с любого адреса. на порт 22"
+    description       = "Входящий трафик TCP. с любого адреса на порт 22"
     protocol          = "TCP"
     v4_cidr_blocks    = ["0.0.0.0/0"]
     port              = 22
   }
 
   ingress {
-    description       = "Входящий трафик TCP. из локального SSH (internal-ssh-sg). на 22й порт"
+    description       = "Входящий трафик TCP. из локального SSH (internal-ssh-sg) на  порт 22"
     protocol          = "TCP"
     security_group_id = yandex_vpc_security_group.internal-ssh-sg.id
     port              = 22
@@ -30,7 +28,7 @@ resource "yandex_vpc_security_group" "external-ssh-sg" {
   }
 
   egress {
-    description       = "Исходящий трафик TCP. на порт 22. на локальный SSH (internal-ssh-sg)"
+    description       = "Исходящий трафик TCP на порт 22 на локальный SSH (internal-ssh-sg)"
     protocol          = "TCP"
     port              = 22
     security_group_id = yandex_vpc_security_group.internal-ssh-sg.id
@@ -47,21 +45,21 @@ resource "yandex_vpc_security_group" "internal-ssh-sg" {
   network_id          = yandex_vpc_network.bastion-network.id
 
   ingress {
-    description       = "Входящий трафик TCP на 22й порт. Из пула локальных подсетей?"
+    description       = "Входящий трафик TCP на порт 22"
     protocol          = "TCP"
     v4_cidr_blocks    = ["192.168.10.0/24"]
     port              = 22
   }
 
   egress {
-    description       = "Исходящий трафик TCP на 22й порт. Из пула локальных подсетей?"
+    description       = "Исходящий трафик TCP на порт 22"
     v4_cidr_blocks    = ["192.168.10.0/24"]
     protocol          = "TCP"
     port              = 22
   }
 
   egress {
-    description       = "Исходящий трафик только tcp на 22й порт"
+    description       = "Исходящий трафик только tcp на порт 22"
     protocol          = "ANY"
     v4_cidr_blocks    = ["0.0.0.0/0"]
     from_port         = 0
@@ -125,7 +123,7 @@ resource "yandex_vpc_security_group" "egress-sg" {
   }
 }
 
-# Zabbix agent SG
+# Zabbix agent security group
 
 resource "yandex_vpc_security_group" "zabbix-sg" {
   name                = "zabbix-sg"
@@ -146,7 +144,7 @@ resource "yandex_vpc_security_group" "zabbix-sg" {
   }
 }
 
-# Zabbix server SG
+# Zabbix server security group
 
 resource "yandex_vpc_security_group" "zabbix-server-sg" {
   name        = "zabbix-server-sg"
