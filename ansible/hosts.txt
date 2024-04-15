@@ -1,5 +1,5 @@
 [bastion_host]
-bastion ansible_host=51.250.89.119 ansible_ssh_user=user
+bastion ansible_host=51.250.77.196 ansible_ssh_user=user
 
 [webservers]
 webserver-1 ansible_host=webserver-1.ru-central1.internal
@@ -16,17 +16,17 @@ zabbix ansible_host=zabbix-server.ru-central1.internal
 
 [webservers:vars]
 ansible_ssh_user=user
-ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p user@51.250.89.119"'
+ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p user@51.250.77.196"'
 
 
 [elasticsearch_host:vars]
 ansible_ssh_user=user
-ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p user@51.250.89.119"'
+ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p user@51.250.77.196"'
 
 [kibana_host:vars]
 ansible_ssh_user=user
-ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p user@51.250.89.119"'
+ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p user@51.250.77.196"'
 
 [zabbix_host:vars]
 ansible_ssh_user=user
-ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p user@51.250.89.119"'
+ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p user@51.250.77.196"'
