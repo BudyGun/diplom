@@ -123,7 +123,7 @@ Cоздайте ВМ, разверните на ней Elasticsearch. Устан
 [snapshot.tf](https://github.com/BudyGun/diplom/blob/main/terraform/snapshot.tf) - конфиг снапшотота.   
 
 ## Конфигурационные файлы ansible
-[ansible](https://github.com/BudyGun/diplom/blob/main/ansible/) - конфиги ansible, таски, хандлеры...
+[ansible](https://github.com/BudyGun/diplom/blob/main/ansible/) - конфиги ansible, таски, хандлеры, инвентори...
 
 
 ## Установка terraform.
