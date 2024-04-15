@@ -107,7 +107,7 @@ Cоздайте ВМ, разверните на ней Elasticsearch. Устан
 
 # РЕШЕНИЕ   
 
-## Конфигурационные файлы   
+## Конфигурационные файлы terraform  
 [bastion.tf](https://github.com/BudyGun/diplom/blob/main/terraform/bastion.tf) - конфиг машины bastion.       
 [elasticsearch.tf](https://github.com/BudyGun/diplom/blob/main/terraform/elasticsearch.tf) - конфиг машины elasticsearch.      
 [zabbix.tf](https://github.com/BudyGun/diplom/blob/main/terraform/zabbix.tf) - конфиг машины zabbix.    
@@ -121,6 +121,9 @@ Cоздайте ВМ, разверните на ней Elasticsearch. Устан
 [security_group.tf](https://github.com/BudyGun/diplom/blob/main/terraform/security_group.tf) - конфиг групп безопасности.    
 [alb.tf](https://github.com/BudyGun/diplom/blob/main/terraform/alb.tf) - конфиг таргет групп, роутера, балансировщика.   
 [snapshot.tf](https://github.com/BudyGun/diplom/blob/main/terraform/snapshot.tf) - конфиг снапшотота.   
+
+## Конфигурационные файлы ansible
+[ansible](https://github.com/BudyGun/diplom/blob/main/ansible/) - конфиги ansible, таски, хандлеры...
 
 
 ## Установка terraform.
