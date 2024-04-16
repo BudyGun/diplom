@@ -1011,6 +1011,12 @@ ssh user@51.250.89.119
 Машина доступна:    
 ![alt text](https://github.com/BudyGun/diplom/blob/main/images/infrastr2.png)   
 
+Поднята облачная инфраструктура:   
+```
+![alt text](https://github.com/BudyGun/diplom/blob/main/images/vm-1.png)   
+```
+
+
 ## Ansible   
 Устанавливаю ansible на машину, где собирается проект:   
 ```
