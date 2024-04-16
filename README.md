@@ -1011,10 +1011,11 @@ ssh user@51.250.89.119
 Машина доступна:    
 ![alt text](https://github.com/BudyGun/diplom/blob/main/images/infrastr2.png)   
 
-Поднята облачная инфраструктура:   
-```
-![alt text](https://github.com/BudyGun/diplom/blob/main/images/vm-1.png)   
-```
+Поднята облачная инфраструктура: вм, сети и подсети, балансировщик, группы безопасности: 
+![alt text](https://github.com/BudyGun/diplom/blob/main/images/common.png) 
+![alt text](https://github.com/BudyGun/diplom/blob/main/images/vm-1.png) 
+![alt text](https://github.com/BudyGun/diplom/blob/main/images/sg.png) 
+
 
 
 ## Ansible   
@@ -1040,14 +1041,21 @@ become_method = sudo
 ```
 где, inventory = /home/vboxuser/diplom/ansible/hosts.txt - файл расположения инвентори,
 remote_user = user - пользователь, прописанный в метаданных при создании машин, которым я буду подключаться к виртуальным машинам.
-Создаю инвентори файл hosts.txt в папке ansible, адреса машин указываю внутренние fqdn:
+Создаю инвентори файл hosts.txt в папке ansible, адреса машин указываю внутренние fqdn-адреса:
 ```
 [bastion_host]
-bastion ansible_host=51.250.89.119 ansible_ssh_user=user
+bastion ansible_host=178.154.222.252 ansible_ssh_user=user
 
 [webservers]
 webserver-1 ansible_host=webserver-1.ru-central1.internal
 webserver-2 ansible_host=webserver-2.ru-central1.internal
+
+[webserver1]
+web1 ansible_host=webserver-1.ru-central1.internal ansible_ssh_user=user
+
+[webserver2]
+web2 ansible_host=webserver-2.ru-central1.internal ansible_ssh_user=user
+
 
 [elasticsearch_host]
 elasticsearch ansible_host=elasticsearch.ru-central1.internal
@@ -1060,20 +1068,24 @@ zabbix ansible_host=zabbix-server.ru-central1.internal
 
 [webservers:vars]
 ansible_ssh_user=user
-ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p user@51.250.89.119"'
-
+ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p user@178.154.222.252"'
 
 [elasticsearch_host:vars]
 ansible_ssh_user=user
-ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p user@51.250.89.119"'
+ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p user@178.154.222.252"'
 
 [kibana_host:vars]
 ansible_ssh_user=user
-ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p user@51.250.89.119"'
+ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p user@178.154.222.252"'
 
 [zabbix_host:vars]
 ansible_ssh_user=user
-ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p user@51.250.89.119"'
+ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p user@178.154.222.252"'
+
+[all:vars]
+ansible_ssh_user=user
+ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p user@178.154.222.252"'
+
 ```
 Проверяю доступность всех хостов командой:
 ```
@@ -1084,10 +1096,70 @@ ansible all -m ping
 
 
 
-## Можно переходить к установке пакетов на вм через playbook.
+## Сайт
+Создаю плэйбук nginx.yaml для установки nginx на вэбсервера 1 и 2, и закачиваю туда разные фалйлы index.html, отличающихся фоном и текстовой информацией - откуда была загружена страница, прописываю до них пути в плэйбуке:
+```
+---
+- name: Test Connection to my servres
+  hosts: webservers
+  become: yes
 
-Создаю роли через пакетный менджер ролей командой, например, для nginx:
+  tasks:
+    - name: update apt packages # Обновление пакетов
+      apt:
+        force_apt_get: true
+        upgrade: dist
+        update_cache: yes
+      become: true
+
+    - name: Install nginx on all servers # Установка nginx
+      apt: 
+        name: nginx
+        state: latest
+        update_cache: yes
+
+- name: copy index.html webserver 1 # Копирование index.html на первый сервер
+  hosts: webserver1
+  become: yes
+
+  tasks:
+    - name: copy index_new.html
+      ansible.builtin.copy:
+        src: ./www/index1.html
+        dest: /var/www/html/index.html
+        owner: root
+        group: sudo
+        mode: "0644"
+
+- name: copy index.html webserver 2 # Копирование index.html на второй сервер
+  hosts: webserver2
+  become: yes
+  
+  tasks:
+    - name: copy index_new.html
+      ansible.builtin.copy:
+        src: ./www/index2.html
+        dest: /var/www/html/index.html
+        owner: root
+        group: sudo
+        mode: "0644"
+
+    - name: Настройка Nginx для отслеживания изменений index.html
+      lineinfile:
+        path: /etc/nginx/sites-available/default
+        regexp: '^index index.html index.htm index.nginx-debian.html;$'
+        line: 'index index.html index.htm index.nginx-debian.html;'
+        state: present
+      notify: reload nginx
+
+  handlers:
+    - name: reload nginx
+      systemd:
+        name: nginx
+        state: reloaded
 ```
-ansible-galaxy init nginx
-```
-Прописываю необходимые файлы в папке ролей.
+
+Проверяю по внешнему адресу балансировщика, что при каждом запросе к 80-му порту происходит поочередная выдача вэб-страниц с двух серверов, сначало с одного потом с другого при каждом обращении, которые в реале будут идентичными.    
+![alt text](https://github.com/BudyGun/diplom/blob/main/images/web-1.png)     
+![alt text](https://github.com/BudyGun/diplom/blob/main/images/web-2.png)     
+
