@@ -1,0 +1,58 @@
+---
+- name: Test Connection to my servres
+  hosts: webservers
+  become: yes
+
+  tasks:
+    - name: update apt packages # Обновление пакетов
+      apt:
+        force_apt_get: true
+        upgrade: dist
+        update_cache: yes
+      become: true
+
+    - name: Install nginx on all servers # Установка nginx
+      apt: 
+        name: nginx
+        state: latest
+        update_cache: yes
+
+- name: copy index.html webserver 1 # Копирование index.html на первый сервер
+  hosts: webserver1
+  become: yes
+
+  tasks:
+    - name: copy index_new.html
+      ansible.builtin.copy:
+        src: ./www/index1.html
+        dest: /var/www/html/index.html
+        owner: root
+        group: sudo
+        mode: "0644"
+
+- name: copy index.html webserver 2 # Копирование index.html на второй сервер
+  hosts: webserver2
+  become: yes
+  
+  tasks:
+    - name: copy index_new.html
+      ansible.builtin.copy:
+        src: ./www/index2.html
+        dest: /var/www/html/index.html
+        owner: root
+        group: sudo
+        mode: "0644"
+
+    - name: Настройка Nginx для отслеживания изменений index.html
+      lineinfile:
+        path: /etc/nginx/sites-available/default
+        regexp: '^index index.html index.htm index.nginx-debian.html;$'
+        line: 'index index.html index.htm index.nginx-debian.html;'
+        state: present
+      notify: reload nginx
+
+  handlers:
+    - name: reload nginx
+      systemd:
+        name: nginx
+        state: reloaded
