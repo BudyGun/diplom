@@ -1160,6 +1160,6 @@ ansible all -m ping
 ```
 
 Проверяю по внешнему адресу балансировщика, что при каждом запросе к 80-му порту происходит поочередная выдача вэб-страниц с двух серверов, сначало с одного потом с другого при каждом обращении, которые в реале будут идентичными.    
-![alt text](https://github.com/BudyGun/diplom/blob/main/images/web-1.png)     
-![alt text](https://github.com/BudyGun/diplom/blob/main/images/web-2.png)     
+![alt text](https://github.com/BudyGun/diplom/blob/main/images/web1.png)     
+![alt text](https://github.com/BudyGun/diplom/blob/main/images/web2.png)     
 
