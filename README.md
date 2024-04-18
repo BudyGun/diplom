@@ -125,6 +125,14 @@ Cоздайте ВМ, разверните на ней Elasticsearch. Устан
 ## Конфигурационные файлы ansible
 [ansible](https://github.com/BudyGun/diplom/blob/main/ansible/) - конфиги ansible, таски, хандлеры, инвентори...
 
+## Конфигурационные файлы сайта
+[index1.html](https://github.com/BudyGun/diplom/blob/main/ansible/www/index1.html) - вэб-страница 1
+[index2.html](https://github.com/BudyGun/diplom/blob/main/ansible/www/index1.html) - вэб-страница 2
+[nginx.yml](https://github.com/BudyGun/diplom/blob/main/ansible/nginx.yml) - плэйбук установки нджинкса и заканчивания вэб-страниц на сервера   
+
+## Конфигурационные файлы zabbix
+[ansible](https://github.com/BudyGun/diplom/blob/main/ansible/all.yml) - плэйбукс создания заббикс-сервера
+
 
 ## Установка terraform.
 Скачиваю архив терраформ с яндекс-облака:
@@ -1158,8 +1166,16 @@ ansible all -m ping
         name: nginx
         state: reloaded
 ```
+Запускаю плэй:    
+![alt text](https://github.com/BudyGun/diplom/blob/main/images/nginx.png)     
 
 Проверяю по внешнему адресу балансировщика, что при каждом запросе к 80-му порту происходит поочередная выдача вэб-страниц с двух серверов, сначало с одного потом с другого при каждом обращении, которые в реале будут идентичными.    
 ![alt text](https://github.com/BudyGun/diplom/blob/main/images/web1.png)     
 ![alt text](https://github.com/BudyGun/diplom/blob/main/images/web2.png)     
+
+## Мониторинг   
+Мониторинг будет развернут на забикс-сервере. Система мониторинга - заббикс.     
+Создаю плэйбук с задачами:  установки необходимых пакетов, создания базы данных mariadb, задание пароля пользователя root, создание базы данных zabbix  ипользователя zabbix, инициализирование базы данных забикса с загрузкой в неё таблиц необходимых для работы.    
+
+
 
