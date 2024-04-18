@@ -126,8 +126,8 @@ Cоздайте ВМ, разверните на ней Elasticsearch. Устан
 [ansible](https://github.com/BudyGun/diplom/blob/main/ansible/) - конфиги ansible, таски, хандлеры, инвентори...
 
 ## Конфигурационные файлы сайта
-[index1.html](https://github.com/BudyGun/diplom/blob/main/ansible/www/index1.html) - вэб-страница 1
-[index2.html](https://github.com/BudyGun/diplom/blob/main/ansible/www/index1.html) - вэб-страница 2
+[index1.html](https://github.com/BudyGun/diplom/blob/main/ansible/www/index1.html) - вэб-страница 1    
+[index2.html](https://github.com/BudyGun/diplom/blob/main/ansible/www/index2.html) - вэб-страница 2    
 [nginx.yml](https://github.com/BudyGun/diplom/blob/main/ansible/nginx.yml) - плэйбук установки нджинкса и заканчивания вэб-страниц на сервера   
 
 ## Конфигурационные файлы zabbix
