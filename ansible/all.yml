@@ -1,0 +1,140 @@
+---
+- name: Install and configure Zabbix Server
+  hosts: zabbix_host
+  become: yes
+  vars:
+    root_password: password
+    db_name: zabbix
+    db_user: zabbix
+    db_password: zabbix
+    sql_script_path: "/usr/share/zabbix-sql-scripts/mysql/server.sql.gz"  # Путь к SQL скрипту    
+
+  
+  tasks:
+
+    - name: Copy Zabbix Server 6.0 deb package to remote host
+      ansible.builtin.copy:
+        src: /home/vboxuser/distrib/zabbix-release_6.0-4+ubuntu22.04_all.deb
+        dest: /tmp/zabbix-release_6.0-4+ubuntu22.04_all.deb
+        mode: 0644  # Устанавливаем права на файл
+
+    - name: Install Zabbix Server 6.0 deb package
+      ansible.builtin.apt:
+        deb: /tmp/zabbix-release_6.0-4+ubuntu22.04_all.deb
+        state: present
+
+    - name: Update package lists
+      ansible.builtin.apt:
+        update_cache: yes
+
+    - name: Install necessary packages
+      apt:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - zabbix-server-mysql 
+        - zabbix-frontend-php 
+        - zabbix-apache-conf 
+        - zabbix-sql-scripts 
+        - zabbix-agent
+        - mariadb-server
+        - mariadb-client
+      become: yes
+
+################################################################################
+
+    - name: Ensure MariaDB is installed
+      apt:
+        name: mariadb-server
+        state: present
+
+    - name: Start MariaDB service
+      service:
+        name: mariadb
+        state: started
+        enabled: yes
+
+
+    - name: Install required system packages for pip
+      apt:
+        name: python3-pip
+        state: present
+
+    - name: Install PyMySQL
+      pip:
+        name: pymysql
+        executable: pip3
+
+
+
+    - name: Set root user password using UNIX socket
+      mysql_user:
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+        user: root
+        password: "{{ root_password }}"
+        check_implicit_admin: yes
+        priv: '*.*:ALL,GRANT'
+        host_all: yes
+      become: yes
+
+    - name: Ensure the MariaDB server is only accessible from localhost
+      lineinfile:
+        dest: /etc/mysql/mariadb.conf.d/50-server.cnf
+        regexp: '^bind-address'
+        line: 'bind-address = 127.0.0.1'
+        state: present
+
+    - name: Restart MariaDB to apply changes
+      service:
+        name: mariadb
+        state: restarted
+
+##################################################################################
+
+    - name: Create Zabbix database
+      mysql_db:
+        login_user: root
+        login_password: "{{ root_password }}"
+        name: "{{ db_name }}"
+        state: present
+        encoding: utf8mb4
+        collation: utf8mb4_bin
+
+    - name: Create Zabbix user
+      mysql_user:
+        login_user: root
+        login_password: "{{ root_password }}"
+        name: "{{ db_user }}"
+        password: "{{ db_password }}"
+        host: localhost
+        state: present
+
+    - name: Grant all privileges to Zabbix user
+      mysql_user:
+        login_user: root
+        login_password: "{{ root_password }}"
+        name: "{{ db_user }}"
+        host: localhost
+        priv: "{{ db_name }}.*:ALL"
+        append_privs: yes
+        state: present
+
+    - name: Set global variable for function creators
+      mysql_variables:
+        login_user: root
+        login_password: "{{ root_password }}"
+        variable: log_bin_trust_function_creators
+        value: 1
+
+    - name: Restart MariaDB to apply changes
+      service:
+        name: mariadb
+        state: restarted
+
+###################################################################################
+
+   
+    - name: Deploy Zabbix database schema
+      shell: zcat {{ sql_script_path }} | mysql --default-character-set=utf8mb4 -u{{ db_user }} -p'{{ db_password }}' {{ db_name }}
+      args:
+        executable: /bin/bash
