@@ -128,10 +128,10 @@ Cоздайте ВМ, разверните на ней Elasticsearch. Устан
 ## Конфигурационные файлы сайта
 [index1.html](https://github.com/BudyGun/diplom/blob/main/ansible/www/index1.html) - вэб-страница 1    
 [index2.html](https://github.com/BudyGun/diplom/blob/main/ansible/www/index2.html) - вэб-страница 2    
-[nginx.yml](https://github.com/BudyGun/diplom/blob/main/ansible/nginx.yaml) - плэйбук установки нджинкса и заканчивания вэб-страниц на сервера   
+[nginx.yaml](https://github.com/BudyGun/diplom/blob/main/ansible/nginx.yaml) - плэйбук установки нджинкса и заканчивания вэб-страниц на сервера   
 
 ## Конфигурационные файлы zabbix
-[ansible](https://github.com/BudyGun/diplom/blob/main/ansible/all.yml) - плэйбукс создания заббикс-сервера
+[all.yml](https://github.com/BudyGun/diplom/blob/main/ansible/all.yml) - плэйбукс создания заббикс-сервера
 
 
 ## Установка terraform.
@@ -1175,7 +1175,7 @@ ansible all -m ping
 
 ## Мониторинг   
 Мониторинг будет развернут на забикс-сервере. Система мониторинга - заббикс.     
-Создаю плэйбук [nginx.yml](https://github.com/BudyGun/diplom/blob/main/ansible/nginx.yaml) с задачами:  установки необходимых пакетов, создания базы данных mariadb, задание пароля пользователя root, создание базы данных zabbix  ипользователя zabbix, инициализирование базы данных забикса с загрузкой в неё таблиц необходимых для работы.    
+Создаю плэйбук [all.yml](https://github.com/BudyGun/diplom/blob/main/ansible/all.yml) с задачами:  установки необходимых пакетов, создания базы данных mariadb, задание пароля пользователя root, создание базы данных zabbix  ипользователя zabbix, инициализирование базы данных забикса с загрузкой в неё таблиц необходимых для работы.    
 
 
 
