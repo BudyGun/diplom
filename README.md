@@ -1400,5 +1400,5 @@ ansible all -m ping
 После работы плэйбуков добавляю хосты на сервер.
 ![alt text](https://github.com/BudyGun/diplom/blob/main/images/zabbix2.png)  
 
-
+## Логи  
 
