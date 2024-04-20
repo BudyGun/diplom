@@ -1174,8 +1174,231 @@ ansible all -m ping
 ![alt text](https://github.com/BudyGun/diplom/blob/main/images/web2.png)     
 
 ## Мониторинг   
-Мониторинг будет развернут на забикс-сервере. Система мониторинга - заббикс.     
-Создаю плэйбук [all.yml](https://github.com/BudyGun/diplom/blob/main/ansible/all.yml) с задачами:  установки необходимых пакетов, создания базы данных mariadb, задание пароля пользователя root, создание базы данных zabbix  ипользователя zabbix, инициализирование базы данных забикса с загрузкой в неё таблиц необходимых для работы.    
+Мониторинг будет развернут на забикс-сервере. Система мониторинга - заббикс.    
+Для создания плэйбука установки заббикс сервера использую официальную документацию забикса - https://www.zabbix.com/download?zabbix=6.0&os_distribution=ubuntu&os_version=22.04&components=server_frontend_agent&db=mysql&ws=apache  . Я выбрал такой набор, т.к. установленные машины -ubuntu 22. Для установки использую сервер баз данных Mariadb. В этом же плейбуке поставлю забикс агента на сам сервер.
+Создаю плэйбук [all.yml](https://github.com/BudyGun/diplom/blob/main/ansible/all.yml) с задачами:    
+1. установки необходимых пакетов,
+2. создания базы данных mariadb,
+3. задание пароля пользователя root, т.к. изначально после установки пароль пустой,
+4. создание базы данных zabbix  и пользователя zabbix,
+5. инициализирование базы данных забикса с загрузкой в неё таблиц необходимых для работы и конфига самого сервера забикс.
+
+```
+---
+- name: Install and configure Zabbix Server
+  hosts: zabbix_host
+  become: yes
+  vars:
+    sql_script_path: "/usr/share/zabbix-sql-scripts/mysql/server.sql.gz"  # Путь к SQL скрипту    
+  vars_files:
+    - vars.yml
+  
+  tasks:
+
+    - name: Copy Zabbix Server 6.0 deb package to remote host
+      ansible.builtin.copy:
+        src: /home/vboxuser/distrib/zabbix-release_6.0-4+ubuntu22.04_all.deb
+        dest: /tmp/zabbix-release_6.0-4+ubuntu22.04_all.deb
+        mode: 0644  # Устанавливаем права на файл
+
+    - name: Install Zabbix Server 6.0 deb package
+      ansible.builtin.apt:
+        deb: /tmp/zabbix-release_6.0-4+ubuntu22.04_all.deb
+        state: present
+
+    - name: Update package lists
+      ansible.builtin.apt:
+        update_cache: yes
+
+    - name: Install necessary packages
+      apt:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - zabbix-server-mysql 
+        - zabbix-frontend-php 
+        - zabbix-apache-conf 
+        - zabbix-sql-scripts 
+        - zabbix-agent
+        - mariadb-server
+        - mariadb-client
+      become: yes
+
+################################################################################
+
+    - name: Ensure MariaDB is installed
+      apt:
+        name: mariadb-server
+        state: present
+
+    - name: Start MariaDB service
+      service:
+        name: mariadb
+        state: started
+        enabled: yes
+
+
+    - name: Install required system packages for pip
+      apt:
+        name: python3-pip
+        state: present
+
+    - name: Install PyMySQL
+      pip:
+        name: pymysql
+        executable: pip3
+
+
+
+    - name: Set root user password using UNIX socket
+      mysql_user:
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+        user: root
+        password: "{{ root_password }}"
+        check_implicit_admin: yes
+        priv: '*.*:ALL,GRANT'
+        host_all: yes
+      become: yes
+
+    - name: Ensure the MariaDB server is only accessible from localhost
+      lineinfile:
+        dest: /etc/mysql/mariadb.conf.d/50-server.cnf
+        regexp: '^bind-address'
+        line: 'bind-address = 127.0.0.1'
+        state: present
+
+    - name: Restart MariaDB to apply changes
+      service:
+        name: mariadb
+        state: restarted
+
+##################################################################################
+
+    - name: Create Zabbix database
+      mysql_db:
+        login_user: root
+        login_password: "{{ root_password }}"
+        name: "{{ db_name }}"
+        state: present
+        encoding: utf8mb4
+        collation: utf8mb4_bin
+
+    - name: Create Zabbix user
+      mysql_user:
+        login_user: root
+        login_password: "{{ root_password }}"
+        name: "{{ db_user }}"
+        password: "{{ db_password }}"
+        host: localhost
+        state: present
+
+    - name: Grant all privileges to Zabbix user
+      mysql_user:
+        login_user: root
+        login_password: "{{ root_password }}"
+        name: "{{ db_user }}"
+        host: localhost
+        priv: "{{ db_name }}.*:ALL"
+        append_privs: yes
+        state: present
+
+    - name: Set global variable for function creators
+      mysql_variables:
+        login_user: root
+        login_password: "{{ root_password }}"
+        variable: log_bin_trust_function_creators
+        value: 1
+
+    - name: Restart MariaDB to apply changes
+      service:
+        name: mariadb
+        state: restarted
+
+###################################################################################
+
+   
+    - name: Deploy Zabbix database schema
+      shell: zcat {{ sql_script_path }} | mysql --default-character-set=utf8mb4 -u{{ db_user }} -p'{{ db_password }}' {{ db_name }}
+      args:
+        executable: /bin/bash
+
+###################################################################################
+
+    - name: Обновление строки DBPassword в файле zabbix_server.conf
+      ansible.builtin.lineinfile:
+        path: /etc/zabbix/zabbix_server.conf
+        regexp: '^#?DBPassword='
+        line: 'DBPassword={{ db_password }}'
+        state: present
+
+    - name: 
+      ansible.builtin.copy:
+        src: zabbix_server.conf
+        dest: /etc/zabbix/zabbix_server.conf
+        owner: root
+        group: root
+        mode: '0600' 
+
+    - name: Перезапуск сервисов Zabbix и Apache2
+      ansible.builtin.systemd:
+        name: "{{ item }}"
+        state: restarted
+        enabled: yes
+      loop:
+        - zabbix-server
+        - zabbix-agent
+        - apache2
+```
+
+Для заливки агентов на сервера сделал плэйбук [agent_z.yml](https://github.com/BudyGun/diplom/blob/main/ansible/agent_z.yml), который устанавливает zabbix-агентов и необходимую конфигурацию.   
+```
+---
+- name: Установка Zabbix агента и настройка его запуска
+  hosts: myserv_za
+  become: yes  # Повышение прав для выполнения задач
+
+  tasks:
+    - name: Скачивание Zabbix release пакета
+      ansible.builtin.get_url:
+        url: "https://repo.zabbix.com/zabbix/6.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.0-4+ubuntu22.04_all.deb"
+        dest: "/tmp/zabbix-release_6.0-4+ubuntu22.04_all.deb"
+        mode: '0644'
+
+    - name: Установка Zabbix release пакета
+      ansible.builtin.apt:
+        deb: "/tmp/zabbix-release_6.0-4+ubuntu22.04_all.deb"
+
+    - name: Обновление списка пакетов
+      ansible.builtin.apt:
+        update_cache: yes
+
+    - name: Установка Zabbix агента
+      ansible.builtin.apt:
+        name: zabbix-agent
+        state: present
+
+    - name: Настройка файла конфигурации Zabbix агента
+      ansible.builtin.template:
+        src: templates/zabbix_agentd.conf.j2
+        dest: /etc/zabbix/zabbix_agentd.conf
+      notify: restart zabbix-agent
+
+    - name: Перезапуск и включение Zabbix агента в автозагрузку
+      ansible.builtin.systemd:
+        name: zabbix-agent
+        state: restarted
+        enabled: yes
+
+  handlers:
+    - name: restart zabbix-agent
+      ansible.builtin.systemd:
+        name: zabbix-agent
+        state: restarted
+        enabled: yes
+
+```
+
+![alt text](https://github.com/BudyGun/diplom/blob/main/images/zabbix.png)  
 
 
 
