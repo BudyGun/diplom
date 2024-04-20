@@ -1398,7 +1398,7 @@ ansible all -m ping
 
 ```
 
-![alt text](https://github.com/BudyGun/diplom/blob/main/images/zabbix.png)  
+![alt text](https://github.com/BudyGun/diplom/blob/main/images/zabbix2.png)  
 
 
 
