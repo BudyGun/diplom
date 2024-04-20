@@ -132,7 +132,7 @@ Cоздайте ВМ, разверните на ней Elasticsearch. Устан
 
 ## Конфигурационные файлы zabbix
 [all.yml](https://github.com/BudyGun/diplom/blob/main/ansible/all.yml) - плэйбукс создания заббикс-сервера
-
+[agen_z.yml](https://github.com/BudyGun/diplom/blob/main/ansible/agent_z.yml) - плэйбукс создания заббикс-агентов
 
 ## Установка terraform.
 Скачиваю архив терраформ с яндекс-облака:
