@@ -131,7 +131,7 @@ Cоздайте ВМ, разверните на ней Elasticsearch. Устан
 [nginx.yaml](https://github.com/BudyGun/diplom/blob/main/ansible/nginx.yaml) - плэйбук установки нджинкса и заканчивания вэб-страниц на сервера   
 
 ## Конфигурационные файлы zabbix
-[all.yml](https://github.com/BudyGun/diplom/blob/main/ansible/all.yml) - плэйбукс создания заббикс-сервера
+[all.yml](https://github.com/BudyGun/diplom/blob/main/ansible/all.yml) - плэйбукс создания заббикс-сервера   
 [agen_z.yml](https://github.com/BudyGun/diplom/blob/main/ansible/agent_z.yml) - плэйбукс создания заббикс-агентов
 
 ## Установка terraform.
