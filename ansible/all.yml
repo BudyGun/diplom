@@ -3,12 +3,9 @@
   hosts: zabbix_host
   become: yes
   vars:
-    root_password: password
-    db_name: zabbix
-    db_user: zabbix
-    db_password: zabbix
     sql_script_path: "/usr/share/zabbix-sql-scripts/mysql/server.sql.gz"  # Путь к SQL скрипту    
-
+  vars_files:
+    - vars.yml
   
   tasks:
 
@@ -138,3 +135,30 @@
       shell: zcat {{ sql_script_path }} | mysql --default-character-set=utf8mb4 -u{{ db_user }} -p'{{ db_password }}' {{ db_name }}
       args:
         executable: /bin/bash
+
+###################################################################################
+
+    - name: Обновление строки DBPassword в файле zabbix_server.conf
+      ansible.builtin.lineinfile:
+        path: /etc/zabbix/zabbix_server.conf
+        regexp: '^#?DBPassword='
+        line: 'DBPassword={{ db_password }}'
+        state: present
+
+    - name: 
+      ansible.builtin.copy:
+        src: zabbix_server.conf
+        dest: /etc/zabbix/zabbix_server.conf
+        owner: root
+        group: root
+        mode: '0600' 
+
+    - name: Перезапуск сервисов Zabbix и Apache2
+      ansible.builtin.systemd:
+        name: "{{ item }}"
+        state: restarted
+        enabled: yes
+      loop:
+        - zabbix-server
+        - zabbix-agent
+        - apache2

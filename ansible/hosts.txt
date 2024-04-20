@@ -1,5 +1,5 @@
 [bastion_host]
-bastion ansible_host="158.160.62.218" ansible_ssh_user=user
+bastion ansible_host="84.201.133.65" ansible_ssh_user=user
 
 [webservers]
 webserver-1 ansible_host=webserver-1.ru-central1.internal
@@ -20,7 +20,8 @@ elasticsearch ansible_host=elasticsearch.ru-central1.internal
 kibana ansible_host=kibana.ru-central1.internal
 
 [zabbix_host]
-zabbix ansible_host=zabbix-server.ru-central1.internal
+zabbix ansible_host=zabbix-server.ru-central1.internal 
+
 
 [myserv]
 zabbix ansible_host=zabbix-server.ru-central1.internal
@@ -28,29 +29,38 @@ kibana ansible_host=kibana.ru-central1.internal
 elasticsearch ansible_host=elasticsearch.ru-central1.internal
 webserver-1 ansible_host=webserver-1.ru-central1.internal
 webserver-2 ansible_host=webserver-2.ru-central1.internal
-bastion ansible_host="158.160.62.218" ansible_ssh_user=user
+bastion ansible_host="84.201.133.65" ansible_ssh_user=user
+
+[myserv_za]
+kibana ansible_host=kibana.ru-central1.internal
+elasticsearch ansible_host=elasticsearch.ru-central1.internal
+webserver-1 ansible_host=webserver-1.ru-central1.internal
+webserver-2 ansible_host=webserver-2.ru-central1.internal
+bastion ansible_host="84.201.133.65" ansible_ssh_user=user
 
 [myserv:vars]
 ansible_ssh_user=user
-ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p user@"158.160.62.218""'
+ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p user@"84.201.133.65""'
 
 [webservers:vars]
 ansible_ssh_user=user
-ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p user@"158.160.62.218""'
+ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p user@"84.201.133.65""'
 
 
 [elasticsearch_host:vars]
 ansible_ssh_user=user
-ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p user@"158.160.62.218""'
+ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p user@"84.201.133.65""'
 
 [kibana_host:vars]
 ansible_ssh_user=user
-ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p user@"158.160.62.218""'
+ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p user@"84.201.133.65""'
 
 [zabbix_host:vars]
 ansible_ssh_user=user
-ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p user@"158.160.62.218""'
+ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p user@"84.201.133.65""'
+
 
 [all:vars]
 ansible_ssh_user=user
-ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p user@"158.160.62.218""'
+ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p user@"84.201.133.65""'
+zabbix_hostname=zabbix

@@ -131,16 +131,18 @@ resource "yandex_vpc_security_group" "zabbix-sg" {
 
   ingress {
     protocol          = "TCP"
-    security_group_id = yandex_vpc_security_group.zabbix-server-sg.id
     from_port         = 10050
     to_port           = 10051
+    v4_cidr_blocks = ["0.0.0.0/0"]
+    security_group_id = yandex_vpc_security_group.zabbix-server-sg.id    
   }
 
   egress {
     protocol          = "TCP"
-    security_group_id = yandex_vpc_security_group.zabbix-server-sg.id
     from_port         = 10050
     to_port           = 10051
+    v4_cidr_blocks = ["0.0.0.0/0"]
+    security_group_id = yandex_vpc_security_group.zabbix-server-sg.id    
   }
 }
 

@@ -27,10 +27,7 @@ resource "yandex_compute_instance" "webserver-1" {
                            yandex_vpc_security_group.zabbix-sg.id,
                            yandex_vpc_security_group.egress-sg.id
                          ]
-/*    security_group_ids = [
-                            yandex_vpc_security_group.external-ssh-sg.id,
-                            yandex_vpc_security_group.internal-ssh-sg.id
-                           ] */
+
 
     nat       = false
     ip_address = "192.168.10.10"
@@ -77,10 +74,7 @@ resource "yandex_compute_instance" "webserver-2" {
                            yandex_vpc_security_group.egress-sg.id
                          ]
 
-/*    security_group_ids = [
-                            yandex_vpc_security_group.external-ssh-sg.id,
-                            yandex_vpc_security_group.internal-ssh-sg.id
-                           ] */
+
     nat       = false
     ip_address = "192.168.10.20"
   }

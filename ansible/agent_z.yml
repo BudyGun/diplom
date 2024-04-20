@@ -1,0 +1,43 @@
+---
+- name: Установка Zabbix агента и настройка его запуска
+  hosts: myserv_za
+  become: yes  # Повышение прав для выполнения задач
+
+  tasks:
+    - name: Скачивание Zabbix release пакета
+      ansible.builtin.get_url:
+        url: "https://repo.zabbix.com/zabbix/6.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.0-4+ubuntu22.04_all.deb"
+        dest: "/tmp/zabbix-release_6.0-4+ubuntu22.04_all.deb"
+        mode: '0644'
+
+    - name: Установка Zabbix release пакета
+      ansible.builtin.apt:
+        deb: "/tmp/zabbix-release_6.0-4+ubuntu22.04_all.deb"
+
+    - name: Обновление списка пакетов
+      ansible.builtin.apt:
+        update_cache: yes
+
+    - name: Установка Zabbix агента
+      ansible.builtin.apt:
+        name: zabbix-agent
+        state: present
+
+    - name: Настройка файла конфигурации Zabbix агента
+      ansible.builtin.template:
+        src: templates/zabbix_agentd.conf.j2
+        dest: /etc/zabbix/zabbix_agentd.conf
+      notify: restart zabbix-agent
+
+    - name: Перезапуск и включение Zabbix агента в автозагрузку
+      ansible.builtin.systemd:
+        name: zabbix-agent
+        state: restarted
+        enabled: yes
+
+  handlers:
+    - name: restart zabbix-agent
+      ansible.builtin.systemd:
+        name: zabbix-agent
+        state: restarted
+        enabled: yes
