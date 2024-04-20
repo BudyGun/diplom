@@ -138,13 +138,6 @@
 
 ###################################################################################
 
-    - name: Обновление строки DBPassword в файле zabbix_server.conf
-      ansible.builtin.lineinfile:
-        path: /etc/zabbix/zabbix_server.conf
-        regexp: '^#?DBPassword='
-        line: 'DBPassword={{ db_password }}'
-        state: present
-
     - name: 
       ansible.builtin.copy:
         src: zabbix_server.conf
