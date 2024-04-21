@@ -1402,4 +1402,9 @@ ansible all -m ping
 ![alt text](https://github.com/BudyGun/diplom/blob/main/images/zabbix2.png)  
 
 ## Логи  
+Скачиваю дистрибутивы:   
+https://mirror.yandex.ru/mirrors/elastic/7/pool/main/f/filebeat/   
+https://mirror.yandex.ru/mirrors/elastic/7/pool/main/k/kibana/   
+https://mirror.yandex.ru/mirrors/elastic/7/pool/main/e/elasticsearch/   
+И помещаю их папку distr.
 
