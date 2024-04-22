@@ -1,0 +1,68 @@
+---
+#- name: Install reqs for Docker
+#  ansible.builtin.apt:
+#    name:
+#      - ca-certificates
+#      - curl
+#      - gnupg
+#      - lsb-release
+#      - software-properties-common
+#      - python3-pip
+#      - virtualenv
+#      - python3-setuptools
+#      - apt-transport-https
+#    state: latest
+#    update_cache: yes
+#  become: yes  
+
+#- name: Копировать GPG-ключ с локального компьютера
+#  copy:
+#    src: /home/vboxuser/distrib/gpg
+#    dest: /usr/share/keyrings/docker-archive-keyring.gpg
+#    owner: root
+#    group: root
+#    mode: '0644'
+
+
+#- name: Add the repository
+#  shell: 'echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian bullseye stable" | tee /etc/apt/sources.list.d/docker.list'
+
+
+- name: Загрузить и установить ключ GPG Docker
+  ansible.builtin.shell:
+    cmd: 'wget -O- https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor | sudo tee /etc/apt/keyrings/docker.gpg > /dev/null'
+
+
+- name: Добавить репозиторий Docker
+  ansible.builtin.shell:
+    cmd: 'echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu jammy stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null'
+
+- name: Обновить кэш APT после добавления репозитория Docker
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: Установить Docker-CE
+  ansible.builtin.apt:
+    name: docker-ce
+    state: latest
+
+- name: Create container
+  docker_container:
+    name: "Kibana"
+    image: "kibana:8.6.2"
+    ports:
+    - "5601:5601"
+    env:
+        ELASTICSEARCH_HOSTS='["http:192.168.10.30:9200"]'
+    state: started
+    restart_policy: always
+
+- name: docker container ls -la
+  tags: container_ls
+  shell: "docker container ls -la"
+  register: container_info
+
+- name: docker container ls -la result
+  tags: container_ls
+  debug:
+    msg: "{{container_info.stdout_lines}}"

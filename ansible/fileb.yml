@@ -1,0 +1,4 @@
+- name: "Install FileBeat"   
+  hosts: webservers                        
+  roles:                                     
+    - filebeat

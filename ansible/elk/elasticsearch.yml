@@ -1,0 +1,35 @@
+# ======================== Elasticsearch Configuration =========================
+
+# Название кластера
+cluster.name: my_cluster
+
+# Имя узла
+node.name: node-1
+
+# Путь к директории для хранения данных
+path.data: /var/lib/elasticsearch
+
+# Путь к директории для логов
+path.logs: /var/log/elasticsearch
+
+# Заблокировать память на старте (предотвращает свопинг)
+bootstrap.memory_lock: true
+
+# Сетевые настройки
+network.host: 0.0.0.0
+http.port: 9200
+
+# Тип обнаружения (для однопользовательских узлов используется single-node)
+discovery.type: single-node
+
+# Настройки безопасности
+xpack.security.enabled: false  # Если вы хотите включить безопасность, установите в true
+
+# Запретить разрушительные действия без явного имени
+action.destructive_requires_name: true
+
+# Настройки резервного копирования
+gateway.recover_after_nodes: 1  # Количество узлов, после которых будет восстановление после перезапуска
+
+# Параметры мониторинга (отключено по умолчанию)
+xpack.monitoring.collection.enabled: false
