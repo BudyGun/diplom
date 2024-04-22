@@ -1052,7 +1052,7 @@ remote_user = user - пользователь, прописанный в мет�
 Создаю инвентори файл hosts.txt в папке ansible, адреса машин указываю внутренние fqdn-адреса:
 ```
 [bastion_host]
-bastion ansible_host=178.154.222.252 ansible_ssh_user=user
+bastion ansible_host="84.201.156.219" ansible_ssh_user=user
 
 [webservers]
 webserver-1 ansible_host=webserver-1.ru-central1.internal
@@ -1060,6 +1060,7 @@ webserver-2 ansible_host=webserver-2.ru-central1.internal
 
 [webserver1]
 web1 ansible_host=webserver-1.ru-central1.internal ansible_ssh_user=user
+
 
 [webserver2]
 web2 ansible_host=webserver-2.ru-central1.internal ansible_ssh_user=user
@@ -1072,27 +1073,32 @@ elasticsearch ansible_host=elasticsearch.ru-central1.internal
 kibana ansible_host=kibana.ru-central1.internal
 
 [zabbix_host]
+zabbix ansible_host=zabbix-server.ru-central1.internal 
+
+
+[myserv]
 zabbix ansible_host=zabbix-server.ru-central1.internal
+kibana ansible_host=kibana.ru-central1.internal
+elasticsearch ansible_host=elasticsearch.ru-central1.internal
+webserver-1 ansible_host=webserver-1.ru-central1.internal
+webserver-2 ansible_host=webserver-2.ru-central1.internal
+bastion ansible_host="84.201.156.219" ansible_ssh_user=user
 
-[webservers:vars]
-ansible_ssh_user=user
-ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p user@178.154.222.252"'
+[myserv_za]
+kibana ansible_host=kibana.ru-central1.internal
+elasticsearch ansible_host=elasticsearch.ru-central1.internal
+webserver-1 ansible_host=webserver-1.ru-central1.internal
+webserver-2 ansible_host=webserver-2.ru-central1.internal
+bastion ansible_host="84.201.156.219" ansible_ssh_user=user
 
-[elasticsearch_host:vars]
-ansible_ssh_user=user
-ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p user@178.154.222.252"'
 
-[kibana_host:vars]
-ansible_ssh_user=user
-ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p user@178.154.222.252"'
 
-[zabbix_host:vars]
-ansible_ssh_user=user
-ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p user@178.154.222.252"'
+
 
 [all:vars]
 ansible_ssh_user=user
-ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p user@178.154.222.252"'
+ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p user@"84.201.156.219""'
+zabbix_hostname=zabbix
 
 ```
 Проверяю доступность всех хостов командой:
