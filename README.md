@@ -1402,9 +1402,5 @@ ansible all -m ping
 ![alt text](https://github.com/BudyGun/diplom/blob/main/images/zabbix2.png)  
 
 ## Логи  
-Скачиваю дистрибутивы:   
-https://mirror.yandex.ru/mirrors/elastic/7/pool/main/f/filebeat/   
-https://mirror.yandex.ru/mirrors/elastic/7/pool/main/k/kibana/   
-https://mirror.yandex.ru/mirrors/elastic/7/pool/main/e/elasticsearch/   
-И помещаю их папку distr.
-
+Устанавливаю на вебсервера файлбит, на хост кибану - установочный пакет кибану, и на эластик - пакет elasticsearch. Создаю таски с заливкой сразу конфигурации сервисов. Захожу по внешнему адресу хоста кибана по порту 5601, в дисковери, вижу индексы файл бита, добавляю их. Итог:   
+![alt text](https://github.com/BudyGun/diplom/blob/main/images/logs.png) 
