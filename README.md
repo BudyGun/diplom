@@ -1406,6 +1406,7 @@ ansible all -m ping
 ```
 После работы плэйбуков добавляю хосты на сервер.
 ![alt text](https://github.com/BudyGun/diplom/blob/main/images/zabbix2.png)  
+![alt text](https://github.com/BudyGun/diplom/blob/main/images/zabbix3.png) 
 
 ## Логи  
 Устанавливаю на вебсервера файлбит, на хост кибану - установочный пакет кибану, и на эластик - пакет elasticsearch. Создаю таски с заливкой сразу конфигурации сервисов. Захожу по внешнему адресу хоста кибана по порту 5601, в дисковери, вижу индексы файл бита, добавляю их. Итог:   
